@@ -1,0 +1,43 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="EmployeeManagementModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityContainer Name="EmployeeManagementEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Departments" EntityType="EmployeeManagementModel.Department" />
+    <EntitySet Name="Employees" EntityType="EmployeeManagementModel.Employee" />
+    <AssociationSet Name="FK_Employees_Departments_Depid" Association="EmployeeManagementModel.FK_Employees_Departments_Depid">
+      <End Role="Department" EntitySet="Departments" />
+      <End Role="Employee" EntitySet="Employees" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="Department">
+    <Key>
+      <PropertyRef Name="Depid" />
+    </Key>
+    <Property Name="Depid" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Depname" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="Employees" Relationship="EmployeeManagementModel.FK_Employees_Departments_Depid" FromRole="Department" ToRole="Employee" />
+  </EntityType>
+  <EntityType Name="Employee">
+    <Key>
+      <PropertyRef Name="EmpId" />
+    </Key>
+    <Property Name="EmpId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="EmpName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="EmpSalary" Type="Int32" Nullable="false" />
+    <Property Name="Depid" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="Department" Relationship="EmployeeManagementModel.FK_Employees_Departments_Depid" FromRole="Employee" ToRole="Department" />
+  </EntityType>
+  <Association Name="FK_Employees_Departments_Depid">
+    <End Type="EmployeeManagementModel.Department" Role="Department" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Type="EmployeeManagementModel.Employee" Role="Employee" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Department">
+        <PropertyRef Name="Depid" />
+      </Principal>
+      <Dependent Role="Employee">
+        <PropertyRef Name="Depid" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema>
